@@ -10,7 +10,7 @@ import { homedir } from "os";
 
 export interface PluginContext {
   config?: Record<string, unknown>;
-  hooks: {
+  hooks?: {
     on(event: string, handler: (...args: unknown[]) => unknown): void;
   };
 }
@@ -78,6 +78,12 @@ export async function activate(context: PluginContext): Promise<void> {
 
   await channel.start();
   console.log(`[ChannelsPlugin] Started with ${config.defaultChannel} channel`);
+
+  // Skip hooks registration if hooks not available
+  if (!context.hooks) {
+    console.log("[ChannelsPlugin] Hooks not available, running in notification-only mode");
+    return;
+  }
 
   // Hook: permission.ask - intercept permission requests
   if (config.notifications.onPermission) {
