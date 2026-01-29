@@ -145,7 +145,7 @@ function uninstall(options: { global?: boolean; project?: boolean }) {
 program
   .name(PLUGIN_NAME)
   .description("Channels plugin for OpenCode - Telegram/Slack/Discord notifications")
-  .version("0.1.0");
+  .version("0.1.1");
 
 program
   .command("install")
