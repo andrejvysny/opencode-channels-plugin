@@ -11,6 +11,29 @@ Connect OpenCode to messaging channels (Telegram/Slack/Discord) for remote permi
 
 ## Installation
 
+### Quick Install (Recommended)
+
+```bash
+npx opencode-channels-plugin install
+# or
+bunx opencode-channels-plugin install
+```
+
+This will:
+1. Add plugin to `~/.config/opencode/opencode.json`
+2. Create config template at `~/.config/opencode/channels.json`
+
+### CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `install` | Add plugin to opencode.json + create config template |
+| `install -p` | Install to project-local `.opencode/` directory |
+| `init` | Create config template only |
+| `uninstall` | Remove plugin from opencode.json |
+
+### Manual Install
+
 ```bash
 bun install opencode-channels-plugin
 ```
