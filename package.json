@@ -1,6 +1,6 @@
 {
   "name": "opencode-channels-plugin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Connect OpenCode to messaging channels (Telegram/Slack/Discord) for remote permission handling and notifications",
   "type": "module",
   "main": "dist/index.js",

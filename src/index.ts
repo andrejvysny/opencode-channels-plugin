@@ -4,12 +4,34 @@ import { PermissionHandler } from "./handlers/permission.js";
 import { NotificationHandler } from "./handlers/notification.js";
 import { PendingRequestsStore } from "./state/pending.js";
 import type { Channel } from "./types.js";
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
 
 export interface PluginContext {
-  config: Record<string, unknown>;
+  config?: Record<string, unknown>;
   hooks: {
     on(event: string, handler: (...args: unknown[]) => unknown): void;
   };
+}
+
+function loadConfigFromFile(): Record<string, unknown> | null {
+  const paths = [
+    join(process.cwd(), ".opencode", "channels.json"),
+    join(homedir(), ".config", "opencode", "channels.json"),
+  ];
+
+  for (const configPath of paths) {
+    if (existsSync(configPath)) {
+      try {
+        const content = readFileSync(configPath, "utf-8");
+        return JSON.parse(content);
+      } catch {
+        continue;
+      }
+    }
+  }
+  return null;
 }
 
 let channel: Channel | null = null;
@@ -37,7 +59,12 @@ function createChannel(config: ChannelsConfig): Channel {
 }
 
 export async function activate(context: PluginContext): Promise<void> {
-  const config = parseConfig(context.config);
+  const rawConfig = context.config ?? loadConfigFromFile();
+  if (!rawConfig) {
+    console.log("[ChannelsPlugin] No config found, plugin disabled");
+    return;
+  }
+  const config = parseConfig(rawConfig);
 
   if (!config.enabled) {
     console.log("[ChannelsPlugin] Plugin disabled");
